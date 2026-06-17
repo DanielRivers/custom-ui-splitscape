@@ -22,15 +22,37 @@ const styles: {
   description: {
     marginBottom: "1.5rem",
   },
+  button: {
+    marginTop: "1.5rem",
+    padding: "0.75rem 1.5rem",
+    backgroundColor: "dodgerblue",
+    color: "#fff",
+    border: "none",
+    borderRadius: "99px",
+    fontWeight: "600",
+    cursor: "pointer",
+    width: "100%",
+  },
 };
 
-export const Widget = (props: { heading: string; description: string }) => {
+export const Widget = (props: {
+  heading: string;
+  description: string;
+  onButtonClick?: () => void;
+}) => {
   return (
     <main style={styles.loginForm}>
       <div style={{ padding: "2rem" }}>
         <h2 style={styles.heading}>{props.heading}</h2>
         <p style={styles.description}>{props.description}</p>
         {getKindeWidget()}
+        <button
+          type="button"
+          style={styles.button}
+          onClick={props.onButtonClick}
+        >
+          Continue
+        </button>
       </div>
     </main>
   );

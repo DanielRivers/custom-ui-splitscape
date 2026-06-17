@@ -8,20 +8,17 @@ import React from "react";
 import { renderToString } from "react-dom/server.browser";
 
 const DefaultPage: React.FC<KindePageEvent> = ({ context, request }) => {
+  const handleButtonClick = () => {
+    console.log("Button clicked");
+  };
 
-  const emailPasswordConnection = kindeSwitch.findConnection(
-    context,
-    (c) => c.credentialMethod === "email:password"
-  );
-
-  console.log("emailPasswordConnection", emailPasswordConnection);
-  
   return (
     <Root context={context} request={request}>
       <DefaultLayout>
         <Widget
           heading={context.widget.content.heading}
           description={context.widget.content.description}
+          onButtonClick={handleButtonClick}
         />
       </DefaultLayout>
     </Root>
