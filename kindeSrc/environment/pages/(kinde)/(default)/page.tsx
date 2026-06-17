@@ -8,6 +8,14 @@ import React from "react";
 import { renderToString } from "react-dom/server.browser";
 
 const DefaultPage: React.FC<KindePageEvent> = ({ context, request }) => {
+
+  const emailPasswordConnection = kindeSwitch.findConnection(
+    context,
+    (c) => c.credentialMethod === "email:password"
+  );
+
+  console.log("emailPasswordConnection", emailPasswordConnection);
+  
   return (
     <Root context={context} request={request}>
       <DefaultLayout>
