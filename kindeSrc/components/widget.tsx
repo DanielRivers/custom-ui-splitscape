@@ -46,13 +46,7 @@ export const Widget = (props: {
         <h2 style={styles.heading}>{props.heading}</h2>
         <p style={styles.description}>{props.description}</p>
         {getKindeWidget()}
-        <button
-          type="button"
-          style={styles.button}
-          onClick={props.onButtonClick}
-        >
-          Continue
-        </button>
+        
       </div>
     </main>
   );

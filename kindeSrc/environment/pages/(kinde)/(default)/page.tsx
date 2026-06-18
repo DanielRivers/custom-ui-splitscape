@@ -20,6 +20,17 @@ const DefaultPage: React.FC<KindePageEvent> = ({ context, request }) => {
           description={context.widget.content.description}
           onButtonClick={handleButtonClick}
         />
+        <button
+          type="button"
+          data-kinde-change-connection-button="true"
+          data-kinde-change-connection-id={"conn_01928e4c2a8fc011b8b21ce728e5e4ac"}
+          data-kinde-change-connection-psid={context.session.pipelineStepId}
+          data-kinde-change-connection-action={JSON.stringify(context.actions.switchConnection)}
+          data-kinde-change-connection-auth-intent="sign_in"
+          data-kinde-change-connection-login-hint={context.auth?.providedEmail}
+        >
+          Sign in with Google
+        </button>
       </DefaultLayout>
     </Root>
   );
