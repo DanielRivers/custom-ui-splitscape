@@ -12,6 +12,8 @@ interface ChangeConnectionButtonProps {
   authIntent?: AuthIntent;
   loginHint?: string;
   children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const ChangeConnectionButton: React.FC<ChangeConnectionButtonProps> = ({
@@ -21,10 +23,14 @@ export const ChangeConnectionButton: React.FC<ChangeConnectionButtonProps> = ({
   authIntent = AuthIntent.Register,
   loginHint,
   children,
+  className,
+  style,
 }) => {
   return (
     <button
       type="button"
+      className={className}
+      style={style}
       data-kinde-change-connection-button="true"
       data-kinde-change-connection-id={connectionId}
       data-kinde-change-connection-psid={pipelineStepId}
