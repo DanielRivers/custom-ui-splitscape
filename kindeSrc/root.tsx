@@ -32,6 +32,7 @@ export const Root = ({
         <link href={getSVGFaviconUrl()} rel="icon" type="image/svg+xml" />
         {getKindeRequiredCSS()}
         {getKindeRequiredJS()}
+        @bc178a068813415ca4760fc31a8bdb01@
         <style>{getStyles()}</style>
       </head>
 
