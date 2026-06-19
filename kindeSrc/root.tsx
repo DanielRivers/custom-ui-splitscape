@@ -19,6 +19,8 @@ export const Root = ({
   request,
 }: RootProps): React.JSX.Element => {
   console.log(context);
+  console.log(context.auth.loginHint.replace('@','_');
+  console.log(context.auth.providedEmail.replace('@','_');
   return (
     <html dir={request.locale.isRtl ? "rtl" : "ltr"} lang={request.locale.lang}>
       <head>
