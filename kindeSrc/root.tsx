@@ -18,6 +18,7 @@ export const Root = ({
   context,
   request,
 }: RootProps): React.JSX.Element => {
+  console.log(context);
   return (
     <html dir={request.locale.isRtl ? "rtl" : "ltr"} lang={request.locale.lang}>
       <head>
