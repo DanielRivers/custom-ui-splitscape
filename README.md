@@ -45,18 +45,66 @@ The template includes customizable layouts for all authentication pages:
 
 Each layout can be customized in the `kindeSrc/enviroment/pages/(kinde)` directory.
 
+### Email Templates
+
+The emails Kinde sends can be designed here too, in the same SplitScape style as the sign-in pages. Kinde's Git sync deploys every `kindeSrc/environment/emails/<key>/email.tsx` it finds, and renders it whenever that email is sent.
+
+| Folder | Sent when |
+| --- | --- |
+| `sign_up_code` | A user confirms their email address at sign-up or signs in with an email code |
+| `password_reset` | A user asks to reset their password |
+| `mfa_code` | A user signs in with email as their second factor |
+| `organization_invitation` | Someone is invited to join an organization |
+
+Custom templates are used only when the environment sends email through your own email provider and Enhanced emails is active. If a template fails to render, Kinde sends its built-in email instead.
+
+Each template:
+
+- exports `emailSettings` (leave out `orgCode` for an environment-wide template; add `locales: ["en", ...]` to limit the languages it renders)
+- default-exports a function that receives the email event and returns `{ subject, html, text }`; all three are required
+
+The event carries the recipient (`event.request.email`: `to`, `code`, `expiresInMinutes`, `link`, `recipient.firstName`), the language (`event.request.locale.lang`) and your branding (`event.context.branding`, plus `event.context.organization` when the email belongs to an organization). Templates have no network access: `kinde.*` bindings such as `kinde.fetch` are removed.
+
+**Customizing**
+
+- **Wording** lives in each `email.tsx`. `sign_up_code` uses the copy you edit on Kinde's Email content page and falls back to the English in the file; the other templates use their own wording and take only the disclaimer from Kinde.
+- **Colors and logo** come from your Kinde brand settings (email button and link colors, logo). When none are set, the templates fall back to the SplitScape palette in `_shared/copy.ts`.
+- **Layout** lives in `_shared/layout.tsx`: tables and inline styles only, because most email clients ignore stylesheets. `_shared/codeEmail.tsx` is the layout the three code emails share.
+- **Per-organization variants** go in a subfolder, for example `emails/sign_up_code/acme/email.tsx` with `orgCode: "org_acme"` in its `emailSettings` (needs the advanced organizations entitlement).
+
+Shared code must stay in `_shared` (or any folder without an `email.tsx`): Kinde treats every `email.tsx` under `emails/` as a template, and names it after its first folder.
+
+Check the templates with `npm run typecheck:emails`.
+
 ## Project Structure
 
 ```
 📂 splitScape
 ├── 📂 kindeSrc
-│   └── 📂 environment
-│       └── 📂 pages
-│           ├── ⚛️ layout.tsx
-│           ├── 📄 styles.ts
-│           └── 📂 (kinde)
-│               └── 📂 (default)
-│                   └── ⚛️ page.tsx
+│   ├── 📂 environment
+│   │   ├── 📂 pages
+│   │   │   └── 📂 (kinde)
+│   │   │       └── 📂 (default)
+│   │   │           └── ⚛️ page.tsx
+│   │   └── 📂 emails
+│   │       ├── 📂 _shared
+│   │       │   ├── ⚛️ layout.tsx
+│   │       │   ├── ⚛️ codeEmail.tsx
+│   │       │   ├── 📄 copy.ts
+│   │       │   └── 📄 types.ts
+│   │       ├── 📂 sign_up_code
+│   │       │   └── ⚛️ email.tsx
+│   │       ├── 📂 password_reset
+│   │       │   └── ⚛️ email.tsx
+│   │       ├── 📂 mfa_code
+│   │       │   └── ⚛️ email.tsx
+│   │       └── 📂 organization_invitation
+│   │           └── ⚛️ email.tsx
+│   ├── 📂 layouts
+│   │   └── ⚛️ default.tsx
+│   ├── 📂 styles
+│   │   └── 📄 styles.ts
+│   └── ⚛️ root.tsx
 └── 📄 kinde.json
 
 ```
