@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": false
+  },
+  "include": ["kindeSrc/environment/emails/**/*.ts", "kindeSrc/environment/emails/**/*.tsx", "kindeSrc/types/**/*.d.ts"]
+}
