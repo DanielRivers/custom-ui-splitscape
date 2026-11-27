@@ -70,7 +70,7 @@ The event carries the recipient (`event.request.email`: `to`, `code`, `expiresIn
 - **Wording** lives in each `email.tsx`. `sign_up_code` uses the copy you edit on Kinde's Email content page and falls back to the English in the file; the other templates use their own wording and take only the disclaimer from Kinde.
 - **Colors and logo** come from your Kinde brand settings (email button and link colors, logo). When none are set, the templates fall back to the SplitScape palette in `_shared/copy.ts`.
 - **Layout** lives in `_shared/layout.tsx`: tables and inline styles only, because most email clients ignore stylesheets. `_shared/codeEmail.tsx` is the layout the three code emails share.
-- **Per-organization variants** go in a subfolder, for example `emails/sign_up_code/acme/email.tsx` with `orgCode: "org_acme"` in its `emailSettings` (needs the advanced organizations entitlement).
+- **Per-organization variants** go in a subfolder of the email's folder, with the organization's code as `orgCode` in `emailSettings`. They need the advanced organizations entitlement, and the organization must exist in the environment the repository syncs to. The `org_0680611efdb` folders are an example: each one reuses its environment template's wording and swaps in a dark panel with an "Organization template" badge (`_shared/organizationVariant.ts`), so you can see which template rendered an email. Change the folder name and `orgCode` to use them for your own organization.
 
 Shared code must stay in `_shared` (or any folder without an `email.tsx`): Kinde treats every `email.tsx` under `emails/` as a template, and names it after its first folder.
 
@@ -91,15 +91,24 @@ Check the templates with `npm run typecheck:emails`.
 │   │       │   ├── ⚛️ layout.tsx
 │   │       │   ├── ⚛️ codeEmail.tsx
 │   │       │   ├── 📄 copy.ts
+│   │       │   ├── 📄 organizationVariant.ts
 │   │       │   └── 📄 types.ts
 │   │       ├── 📂 sign_up_code
-│   │       │   └── ⚛️ email.tsx
+│   │       │   ├── ⚛️ email.tsx
+│   │       │   └── 📂 org_0680611efdb
+│   │       │       └── ⚛️ email.tsx
 │   │       ├── 📂 password_reset
-│   │       │   └── ⚛️ email.tsx
+│   │       │   ├── ⚛️ email.tsx
+│   │       │   └── 📂 org_0680611efdb
+│   │       │       └── ⚛️ email.tsx
 │   │       ├── 📂 mfa_code
-│   │       │   └── ⚛️ email.tsx
+│   │       │   ├── ⚛️ email.tsx
+│   │       │   └── 📂 org_0680611efdb
+│   │       │       └── ⚛️ email.tsx
 │   │       └── 📂 organization_invitation
-│   │           └── ⚛️ email.tsx
+│   │           ├── ⚛️ email.tsx
+│   │           └── 📂 org_0680611efdb
+│   │               └── ⚛️ email.tsx
 │   ├── 📂 layouts
 │   │   └── ⚛️ default.tsx
 │   ├── 📂 styles

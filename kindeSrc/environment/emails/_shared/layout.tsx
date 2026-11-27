@@ -19,6 +19,20 @@ export type EmailTheme = {
   link: string;
 };
 
+/**
+ * Visual overrides for a variant of a template, such as a per-organization
+ * one. Templates take it as an optional second argument; Kinde passes only the
+ * event, so the environment-wide emails never get one.
+ */
+export type EmailVariant = {
+  /** Background of the brand panel at the top. Defaults to the button colour. */
+  panelColor?: string;
+  /** Text colour on the panel. Defaults to the button text colour. */
+  panelTextColor?: string;
+  /** A small label shown on the right of the panel. */
+  badge?: string;
+};
+
 /** Branding colours from the event, falling back to the repo palette. */
 export const themeFor = (event: KindeEmailEvent): EmailTheme => {
   const { branding } = event.context;
@@ -123,9 +137,19 @@ export const Muted = ({ children }: { children: React.ReactNode }) => (
   </p>
 );
 
-const BrandPanel = ({ event, theme }: { event: KindeEmailEvent; theme: EmailTheme }) => {
+const BrandPanel = ({
+  event,
+  theme,
+  variant,
+}: {
+  event: KindeEmailEvent;
+  theme: EmailTheme;
+  variant?: EmailVariant;
+}) => {
   const name = senderName(event);
   const logoUrl = safeUrl(event.context.organization?.logoUrl) ?? safeUrl(event.context.branding.logoUrl);
+  const panelColor = safeColor(variant?.panelColor, theme.button);
+  const panelTextColor = safeColor(variant?.panelTextColor, theme.buttonText);
 
   return (
     <table
@@ -134,7 +158,7 @@ const BrandPanel = ({ event, theme }: { event: KindeEmailEvent; theme: EmailThem
       cellPadding={0}
       cellSpacing={0}
       border={0}
-      style={{ backgroundColor: theme.button, borderRadius: "12px" }}
+      style={{ backgroundColor: panelColor, borderRadius: "12px" }}
     >
       <tbody>
         <tr>
@@ -161,13 +185,35 @@ const BrandPanel = ({ event, theme }: { event: KindeEmailEvent; theme: EmailThem
                   fontSize: "20px",
                   fontWeight: 600,
                   lineHeight: "28px",
-                  color: theme.buttonText,
+                  color: panelTextColor,
                 }}
               >
                 {name}
               </span>
             )}
           </td>
+          {variant?.badge ? (
+            <td align="right" style={{ padding: "28px 32px 28px 0", textAlign: "right", verticalAlign: "middle" }}>
+              <span
+                style={{
+                  display: "inline-block",
+                  border: `1px solid ${panelTextColor}`,
+                  borderRadius: "99px",
+                  padding: "4px 12px",
+                  fontFamily: palette.fontFamily,
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  lineHeight: "16px",
+                  letterSpacing: "0.04em",
+                  textTransform: "uppercase",
+                  color: panelTextColor,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {variant.badge}
+              </span>
+            </td>
+          ) : null}
         </tr>
       </tbody>
     </table>
@@ -182,9 +228,10 @@ export type EmailLayoutProps = {
   heading: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  variant?: EmailVariant;
 };
 
-export const EmailLayout = ({ event, subject, preview, heading, children, footer }: EmailLayoutProps) => {
+export const EmailLayout = ({ event, subject, preview, heading, children, footer, variant }: EmailLayoutProps) => {
   const theme = themeFor(event);
   const lang = plain(event.request.locale?.lang).trim() || "en";
   const dir = RTL_LANGUAGES.includes(lang.split("-")[0].toLowerCase()) ? "rtl" : "ltr";
@@ -241,7 +288,7 @@ export const EmailLayout = ({ event, subject, preview, heading, children, footer
                   <tbody>
                     <tr>
                       <td style={{ padding: "8px" }}>
-                        <BrandPanel event={event} theme={theme} />
+                        <BrandPanel event={event} theme={theme} variant={variant} />
                       </td>
                     </tr>
                     <tr>
