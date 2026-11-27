@@ -1,17 +1,17 @@
-import SignUpCodeEmail from "../email";
+import MfaCodeEmail from "../email";
 import { organizationVariant } from "../../_shared/organizationVariant";
 import type { KindeEmailEvent, KindeEmailRenderResult, KindeEmailSettings } from "../../_shared/types";
 
-// sign_up_code for organization org_0680611efdb only. Same wording as the
+// mfa_code for organization org_56ec0f10067b6 only. Same wording as the
 // environment template, with the organization look.
 
 export const emailSettings: KindeEmailSettings = {
-  orgCode: "org_0680611efdb",
+  orgCode: "org_56ec0f10067b6",
   bindings: {},
 };
 
-export default async function OrganizationSignUpCodeEmail(
+export default async function OrganizationMfaCodeEmail(
   input: KindeEmailEvent | { event: KindeEmailEvent },
 ): Promise<KindeEmailRenderResult> {
-  return SignUpCodeEmail(input, organizationVariant);
+  return MfaCodeEmail(input, organizationVariant);
 }
