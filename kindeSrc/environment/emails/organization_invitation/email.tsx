@@ -8,6 +8,7 @@ import {
   plainText,
   renderEmail,
   resolveEvent,
+  type EmailVariant,
   themeFor,
 } from "../_shared/layout";
 import type { KindeEmailEvent, KindeEmailRenderResult, KindeEmailSettings } from "../_shared/types";
@@ -23,6 +24,7 @@ export const emailSettings: KindeEmailSettings = {
 
 export default async function OrganizationInvitationEmail(
   input: KindeEmailEvent | { event: KindeEmailEvent },
+  variant?: EmailVariant,
 ): Promise<KindeEmailRenderResult> {
   const event = resolveEvent(input);
   const link = safeUrl(event.request.email.link);
@@ -45,6 +47,7 @@ export default async function OrganizationInvitationEmail(
       preview={`Accept your invitation to join ${organization}`}
       heading={heading}
       footer={<Muted>{disclaimer}</Muted>}
+      variant={variant}
     >
       <Paragraphs copy={body} />
       <Button href={link} label="Accept invitation" theme={theme} />
