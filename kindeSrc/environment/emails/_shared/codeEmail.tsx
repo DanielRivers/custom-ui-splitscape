@@ -1,6 +1,6 @@
 import React from "react";
 import { formatDuration, plain, senderName, toSubject } from "./copy";
-import { CodeBlock, EmailLayout, Muted, Paragraphs, plainText, renderEmail } from "./layout";
+import { CodeBlock, EmailLayout, Muted, Paragraphs, plainText, renderEmail, type EmailVariant } from "./layout";
 import type { KindeEmailEvent, KindeEmailRenderResult } from "./types";
 
 // The sign-up, password reset and MFA emails share one shape: a heading, some
@@ -50,6 +50,7 @@ export const renderCodeEmail = (
   event: KindeEmailEvent,
   values: CodeEmailValues,
   copy: CodeEmailCopy,
+  variant?: EmailVariant,
 ): KindeEmailRenderResult => {
   const subject = toSubject(copy.subject);
   const disclaimer = copy.disclaimer ? sentence(copy.disclaimer) : undefined;
@@ -61,6 +62,7 @@ export const renderCodeEmail = (
       preview={copy.preview}
       heading={copy.heading}
       footer={disclaimer ? <Muted>{disclaimer}</Muted> : undefined}
+      variant={variant}
     >
       <Paragraphs copy={copy.body} />
       <CodeBlock code={values.code} />

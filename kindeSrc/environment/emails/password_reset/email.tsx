@@ -1,6 +1,6 @@
 import { codeEmailValues, renderCodeEmail } from "../_shared/codeEmail";
 import { greeting, translate } from "../_shared/copy";
-import { resolveEvent } from "../_shared/layout";
+import { resolveEvent, type EmailVariant } from "../_shared/layout";
 import type { KindeEmailEvent, KindeEmailRenderResult, KindeEmailSettings } from "../_shared/types";
 
 // Sent with the one-time code a user enters to reset their password.
@@ -14,6 +14,7 @@ export const emailSettings: KindeEmailSettings = {
 
 export default async function PasswordResetEmail(
   input: KindeEmailEvent | { event: KindeEmailEvent },
+  variant?: EmailVariant,
 ): Promise<KindeEmailRenderResult> {
   const event = resolveEvent(input);
   const values = codeEmailValues(event);
@@ -31,5 +32,5 @@ export default async function PasswordResetEmail(
       `You received this email because a password reset was requested for ${business}`,
       { business_name: business, code, expiration_duration: expiresIn },
     ),
-  });
+  }, variant);
 }
